@@ -1,0 +1,56 @@
+name: fleet-manager-backend
+region: nyc
+services:
+  - name: api
+    github:
+      repo: your-username/fleet-manager
+      branch: main
+      deploy_on_push: true
+    build_command: npm run build
+    run_command: npm start
+    environment_slug: node-js
+    http_port: 3001
+    instance_count: 2
+    instance_size_slug: professional-xs
+    routes:
+      - path: /api
+      - path: /ws
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: '3001'
+      - key: DATABASE_URL
+        value: ${db.DATABASE_URL}
+      - key: REDIS_URL
+        value: ${redis.REDIS_URL}
+      - key: JWT_SECRET
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+      - key: WIALON_TOKEN
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 30
+      period_seconds: 10
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+
+databases:
+  - name: db
+    engine: PG
+    production: true
+    version: '15'
+    size: db-s-1vcpu-1gb
+
+  - name: redis
+    engine: REDIS
+    production: true
+    version: '7'
+    size: db-s-1vcpu-1gb
+
+alerts:
+  - rule: DEPLOYMENT_FAILED
+  - rule: DOMAIN_FAILED

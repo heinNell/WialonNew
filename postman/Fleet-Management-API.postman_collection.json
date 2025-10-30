@@ -1,0 +1,413 @@
+{
+  "info": {
+    "name": "Fleet Management API",
+    "description": "Complete API collection for Fleet Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('access_token', response.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"role\": \"admin\",\n  \"phone\": \"+27123456789\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('access_token', response.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "profile"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vehicles",
+      "item": [
+        {
+          "name": "Get All Vehicles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehicles",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicles"]
+            }
+          }
+        },
+        {
+          "name": "Get Vehicle by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehicles/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicles", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Online Vehicles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehicles/online",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicles", "online"]
+            }
+          }
+        },
+        {
+          "name": "Get Vehicle Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehicles/:id/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicles", ":id", "statistics"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Vehicle Track",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehicles/:id/track?from=2024-01-01T00:00:00Z&to=2024-01-02T00:00:00Z",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicles", ":id", "track"],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2024-01-01T00:00:00Z"
+                },
+                {
+                  "key": "to",
+                  "value": "2024-01-02T00:00:00Z"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Sync Vehicles",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehicles/sync",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicles", "sync"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Get All Tasks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logistics/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["logistics", "tasks"]
+            }
+          }
+        },
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Delivery to Customer A\",\n  \"description\": \"Deliver package\",\n  \"type\": \"delivery\",\n  \"priority\": \"high\",\n  \"latitude\": -26.1950,\n  \"longitude\": 28.0340,\n  \"address\": \"123 Main St, Johannesburg\",\n  \"contactName\": \"John Customer\",\n  \"contactPhone\": \"+27123456789\",\n  \"scheduledStartTime\": \"2024-01-15T09:00:00Z\",\n  \"estimatedDuration\": 30,\n  \"weight\": 5.5,\n  \"packageCount\": 2,\n  \"orderNumber\": \"ORD-001\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/logistics/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["logistics", "tasks"]
+            }
+          }
+        },
+        {
+          "name": "Update Task Status",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"completed\",\n  \"notes\": \"Successfully delivered\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/logistics/tasks/:id/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["logistics", "tasks", ":id", "status"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Task Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logistics/tasks/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["logistics", "tasks", "statistics"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Routes",
+      "item": [
+        {
+          "name": "Get All Routes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logistics/routes",
+              "host": ["{{baseUrl}}"],
+              "path": ["logistics", "routes"]
+            }
+          }
+        },
+        {
+          "name": "Create Route",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Morning Delivery Route\",\n  \"description\": \"Deliveries for north area\",\n  \"vehicleId\": \"vehicle-uuid\",\n  \"startLatitude\": -26.1950,\n  \"startLongitude\": 28.0340,\n  \"startAddress\": \"Warehouse\",\n  \"scheduledStartTime\": \"2024-01-15T08:00:00Z\",\n  \"taskIds\": [\"task-uuid-1\", \"task-uuid-2\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/logistics/routes",
+              "host": ["{{baseUrl}}"],
+              "path": ["logistics", "routes"]
+            }
+          }
+        },
+        {
+          "name": "Optimize Route",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logistics/routes/:id/optimize",
+              "host": ["{{baseUrl}}"],
+              "path": ["logistics", "routes", ":id", "optimize"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Route Progress",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/logistics/routes/:id/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["logistics", "routes", ":id", "progress"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wialon",
+      "item": [
+        {
+          "name": "Login to Wialon",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/wialon/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["wialon", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Wialon Units",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/wialon/units",
+              "host": ["{{baseUrl}}"],
+              "path": ["wialon", "units"]
+            }
+          }
+        },
+        {
+          "name": "Get Geofences",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/wialon/geofences",
+              "host": ["{{baseUrl}}"],
+              "path": ["wialon", "geofences"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

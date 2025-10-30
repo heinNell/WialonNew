@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      String   @default("viewer") // admin, driver, viewer
+  phone     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tasks   Task[]
+  routes  Route[]
+
+  @@map("users")
+}
+
+model Vehicle {
+  id              String    @id @default(uuid())
+  wialonId        String    @unique
+  name            String
+  licensePlate    String    @unique
+  type            String    // van, truck, car, etc.
+  status          String    @default("active") // active, inactive, maintenance
+  isOnline        Boolean   @default(false)
+  currentLat      Float?
+  currentLng      Float?
+  currentSpeed    Float?
+  lastMessageTime DateTime?
+  capacity        Float?
+  fuelType        String?
+  make            String?
+  model           String?
+  year            Int?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  tasks  Task[]
+  routes Route[]
+
+  @@map("vehicles")
+}
+
+model Task {
+  id                 String    @id @default(uuid())
+  title              String
+  description        String?
+  type               String    // delivery, pickup, service, maintenance
+  priority           String    @default("medium") // low, medium, high, urgent
+  status             String    @default("pending") // pending, assigned, in_progress, completed, cancelled
+  latitude           Float
+  longitude          Float
+  address            String
+  contactName        String?
+  contactPhone       String?
+  contactEmail       String?
+  scheduledStartTime DateTime?
+  scheduledEndTime   DateTime?
+  actualStartTime    DateTime?
+  actualEndTime      DateTime?
+  estimatedDuration  Int? // in minutes
+  weight             Float?
+  volume             Float?
+  packageCount       Int?
+  orderNumber        String?
+  notes              String?
+  completionNotes    String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  vehicleId String?
+  vehicle   Vehicle? @relation(fields: [vehicleId], references: [id])
+
+  routeTasks RouteTask[]
+
+  @@map("tasks")
+}
+
+model Route {
+  id                 String    @id @default(uuid())
+  name               String
+  description        String?
+  status             String    @default("draft") // draft, active, in_progress, completed, cancelled
+  vehicleId          String?
+  vehicle            Vehicle?  @relation(fields: [vehicleId], references: [id])
+  userId             String?
+  user               User?     @relation(fields: [userId], references: [id])
+  startLatitude      Float?
+  startLongitude     Float?
+  startAddress       String?
+  endLatitude        Float?
+  endLongitude       Float?
+  endAddress         String?
+  scheduledStartTime DateTime?
+  scheduledEndTime   DateTime?
+  actualStartTime    DateTime?
+  actualEndTime      DateTime?
+  totalDistance      Float?
+  estimatedDuration  Int? // in minutes
+  isOptimized        Boolean   @default(false)
+  optimizationMetric String? // time, distance, fuel
+  totalTasks         Int       @default(0)
+  completedTasks     Int       @default(0)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  routeTasks RouteTask[]
+
+  @@map("routes")
+}
+
+model RouteTask {
+  id        String   @id @default(uuid())
+  routeId   String
+  route     Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  sequence  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([routeId, taskId])
+  @@map("route_tasks")
+}

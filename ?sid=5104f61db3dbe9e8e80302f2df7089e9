@@ -1,0 +1,39 @@
+<!doctype html>
+<meta charset=utf-8>
+<title>Logistics</title>
+<meta http-equiv=x-ua-compatible content="ie=edge, chrome=1, requiresActiveX=true">
+<meta http-equiv=pragma content=no-cache>
+<meta name=description content="Log in to your Logistics account to perform your daily tasks for your local delivery management activities.">
+<link id=favicon rel="shortcut icon" href=./img/favicon.png type=image/png>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=HandheldFriendly content=True>
+<meta name=MobileOptimized content=320>
+<meta name=viewport content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<meta name=format-detection content="telephone=no">
+<meta name=format-detection content="address=no">
+<meta http-equiv=cleartype content=on>
+<meta http-equiv=x-dns-prefetch-control content=on>
+<link rel=dns-prefetch href=//hst-api.wialon.com>
+<link rel=dns-prefetch href=//dev-api.wialon.com>
+<link rel=dns-prefetch href=//apps.wialon.com>
+<link rel=dns-prefetch href=//api-maps.yandex.ru>
+<link rel=dns-prefetch href=//fonts.googleapis.com>
+<link rel=stylesheet href="//fonts.googleapis.com/css?family=Roboto:400,300,500,700&subset=latin,cyrillic">
+<link rel=stylesheet href="//fonts.googleapis.com/icon?family=Material+Icons">
+<script>
+        window.AppConfig = {};
+        // TODO: remove this function
+        function appPredefineVariables(langs, docLink, isWhitelabel, config) {
+                AppConfig = config;
+                AppConfig.LANGS = langs;
+                AppConfig.IS_WHITELABEL = isWhitelabel;
+                AppConfig.DOC_LINK = isWhitelabel ? null : docLink;
+        }
+        // Leaflet thouch off env
+        window.L_NO_TOUCH = false;
+</script>
+<link href=./css/main.bundle.css?31db46e7fdc4d177125b&31db46e7fdc4d177125b rel=stylesheet>
+<body>
+        <!--[if IE]><p style="text-align: right;padding-right: 9px;"><marquee>You are using an <strong>outdated</strong> browser. Please <a href="//browsehappy.com/" target="_blank">upgrade your browser</a> to improve your experience.</marquee></p><![endif]-->
+        <div id=container class=container></div>
+        <script src=./js/bundle_main.js?31db46e7fdc4d177125b&31db46e7fdc4d177125b></script>

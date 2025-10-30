@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fleet-postgres-dev
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fleet_management
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - fleet-network-dev
+
+  redis:
+    image: redis:7-alpine
+    container_name: fleet-redis-dev
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - fleet-network-dev
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: fleet-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@fleet.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
+    networks:
+      - fleet-network-dev
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: fleet-redis-commander
+    environment:
+      REDIS_HOSTS: local:redis:6379
+    ports:
+      - '8081:8081'
+    depends_on:
+      - redis
+    networks:
+      - fleet-network-dev
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:
+
+networks:
+  fleet-network-dev:
+    driver: bridge
